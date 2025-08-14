@@ -89,11 +89,11 @@ export default function Home() {
                   </div>
                   <div className="text-center p-4 bg-gray-800/50 rounded-lg">
                     <FaBrain className="text-2xl text-purple-400 mx-auto mb-2" />
-                    <div className="text-sm text-gray-300">Expert AI</div>
+                    <div className="text-sm text-gray-300">Expert</div>
                   </div>
                   <div className="text-center p-4 bg-gray-800/50 rounded-lg">
                     <HiLightningBolt className="text-2xl text-green-400 mx-auto mb-2" />
-                    <div className="text-sm text-gray-300">Real-time</div>
+                    <div className="text-sm text-gray-300">Multi Model</div>
                   </div>
                 </div>
 
