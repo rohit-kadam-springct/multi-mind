@@ -1,6 +1,8 @@
-import { getAIClient, GPT_MODEL } from "@/libs/aiClient";
+import OpenAI from "openai";
 
-const client = getAIClient();
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 interface PersonaRequest {
   message: string;
@@ -119,7 +121,7 @@ export async function POST(request: Request) {
     ];
 
     const response = await client.chat.completions.create({
-      model: GPT_MODEL,
+      model: "gpt-4o-mini",
       messages: messages as any,
       max_tokens: 2000,
       temperature: 0.7,

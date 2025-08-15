@@ -20,7 +20,7 @@ PERSONAS:
 ROUTING RULES:
 1. Tag "hitesh" for: Frontend frameworks, UI/UX, mobile apps, beginner programming questions, JavaScript/React/Next.js
 2. Tag "piyush" for: Backend architecture, databases, DevOps, system design, server infrastructure, performance optimization
-3. Tag "both" for: Full-stack questions, general programming concepts that need both perspectives, architecture decisions affecting both frontend and backend
+3. Tag "both" for: Full-stack questions, general programming concepts that need both perspectives, architecture decisions affecting both frontend and backend, generic greetings and conversational messages
 
 EXAMPLES:
 User: "How to create a React component?"
@@ -33,6 +33,12 @@ User: "How to build a complete e-commerce app?"
 Response: both
 
 User: "What's the best way to handle authentication in a web app?"
+Response: both
+
+User: "Hello"
+Response: both
+
+User: "Hi there!"
 Response: both
 
 Respond with only: hitesh, piyush, or both`;
@@ -65,12 +71,9 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error("Router error:", error);
-    return Response.json(
-      {
-        tag: "hitesh",
-        confidence: 0.5,
-      },
-      { status: 500 }
-    );
+    return Response.json({
+      tag: "hitesh",
+      confidence: 0.9, // future scope
+    });
   }
 }
