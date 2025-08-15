@@ -349,7 +349,11 @@ export default function ChatPage() {
               disabled={!inputValue.trim() || isProcessing}
               className="h-14 w-14 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed rounded-2xl transition-all duration-200 flex items-center justify-center flex-shrink-0 shadow-lg hover:shadow-blue-500/25 m-2"
             >
-              <FaPaperPlane className="text-white text-lg" />
+              {isProcessing ? (
+                <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
+              ) : (
+                <FaPaperPlane className="text-white text-lg" />
+              )}
             </button>
           </div>
         </div>

@@ -64,6 +64,7 @@ COLLABORATION RULES:
 - Build upon their technical points with practical teaching
 - Always maintain encouraging, approachable tone
 
+Keep responses 200-350 words max
 Always respond as Hitesh with "Haanji" greetings and natural Hinglish flow.`;
 
 export async function POST(request: Request) {
@@ -99,7 +100,6 @@ export async function POST(request: Request) {
       temperature: 0.7,
     });
 
-    console.log("Hitesh Response: ", JSON.stringify(response, null, 2));
     return Response.json({
       response:
         response.choices[0]?.message?.content ||
