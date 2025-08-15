@@ -2,12 +2,11 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
 import { FaPaperPlane, FaArrowLeft, FaBrain, FaRobot } from 'react-icons/fa';
-import { HiDotsHorizontal } from 'react-icons/hi';
 import { BiCode } from 'react-icons/bi';
 import { FaChartLine } from 'react-icons/fa';
 import { useChat } from '@/hooks/useChat';
+import ChatMessage from '@/components/ChatMessage';
 
 interface Message {
   id: string;
@@ -143,15 +142,13 @@ export default function ChatPage() {
   };
 
   const handleExampleClick = (exampleText: string) => {
-    setInputValue(exampleText);
-    if (textareaRef.current) {
-      textareaRef.current.focus();
-    }
+    sendMessage(exampleText.trim())
   };
 
   const handleSendMessage = async () => {
     if (!inputValue.trim() || isProcessing) return;
     sendMessage(inputValue.trim())
+    setInputValue("");
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -285,18 +282,10 @@ export default function ChatPage() {
                       }}
                     />
                   </div>
-                  <div className="max-w-xs lg:max-w-2xl">
-                    <div className="bg-gradient-to-r from-gray-800/80 to-gray-700/60 backdrop-blur-sm text-white px-5 py-3 rounded-3xl rounded-tl-lg shadow-lg border border-gray-600/30">
-                      <div className="flex items-center space-x-2 mb-2">
-                        <span className="text-xs font-semibold text-gray-300">{message.personaName}</span>
-                        <div className={`w-1.5 h-1.5 rounded-full bg-${getPersonaColor(message.personaId!)}-400`}></div>
-                      </div>
-                      <p className="text-sm leading-relaxed">{message.content}</p>
-                    </div>
-                    <p className="text-xs text-gray-500 mt-2">
-                      {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </p>
-                  </div>
+                  <ChatMessage
+                    getPersonaColor={getPersonaColor}
+                    message={message}
+                  />
                 </div>
               )}
             </div>
