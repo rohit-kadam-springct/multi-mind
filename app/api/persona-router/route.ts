@@ -41,6 +41,21 @@ Response: both
 User: "Hi there!"
 Response: both
 
+User: "Hello Piyush"
+Response: piyush
+
+User: "Hi Piyush"
+Response: piyush
+
+User: "Hi Hitesh Sir"
+Response: hitesh
+
+User: "Hello Hitesh"
+Response: hitesh
+
+User: "Hello Sir"
+Response: both
+
 Respond with only: hitesh, piyush, or both`;
 
 export async function POST(request: Request) {

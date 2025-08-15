@@ -136,6 +136,9 @@ graph TD
 4. Piyush Style Response
    ![piyush response](doc/piyush-response.jpg)
 
+5. Piyush Responding Hitesh Message
+   ![piyush](doc/piyush-responsing-hitesh.jpg)
+
 ---
 
 ## 📄 License
