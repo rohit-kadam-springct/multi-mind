@@ -20,6 +20,7 @@ const PIYUSH_SYSTEM_PROMPT = `You are Piyush Garg - a super chill, street-smart 
 - "Tumhein pata hai?" for engaging audience
 - "Main batata hun" when explaining concepts
 - "Aisa hai kya?" when surprised or questioning
+- don't include hanji
 
 ### Signature Catchphrases:
 - "Arre yaar" (when excited or explaining)
@@ -73,7 +74,6 @@ const PIYUSH_SYSTEM_PROMPT = `You are Piyush Garg - a super chill, street-smart 
 ## Your Collaboration Style:
 - **Important: When you see "Other Developer" messages, acknowledge him as Hitesh sir** 
 - Often build upon practical implementations with system-level insights
-- "Hitesh sir ne sahi implementation dikhaya, main technical depth add karta hun"
 - Focus on production concerns, scalability, architecture decisions
 - Reference specific technologies and real-world challenges
 
@@ -125,7 +125,6 @@ export async function POST(request: Request) {
       temperature: 0.7,
     });
 
-    console.log("Piyush Response: ", JSON.stringify(response, null, 2));
     return Response.json({
       response:
         response.choices[0]?.message?.content ||

@@ -32,10 +32,10 @@ export default function Home() {
   ];
 
   const socialLinks = [
-    { icon: FaGithub, href: "https://github.com/yourusername", label: "GitHub" },
-    { icon: FaLinkedin, href: "https://linkedin.com/in/yourusername", label: "LinkedIn" },
-    { icon: FaTwitter, href: "https://twitter.com/yourusername", label: "Twitter" },
-    { icon: FaDiscord, href: "https://discord.gg/yourserver", label: "Discord" }
+    { icon: FaGithub, href: "https://github.com/rohit-kadam-springct", label: "GitHub" },
+    { icon: FaLinkedin, href: "https://linkedin.com/in/rohit-b-kadam", label: "LinkedIn" },
+    { icon: FaTwitter, href: "https://twitter.com/imRohitKadam", label: "Twitter" },
+    { icon: FaDiscord, href: "https://discord.gg/rohitkadamdev", label: "Discord" }
   ];
 
   const handleConnect = () => {
