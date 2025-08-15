@@ -7,6 +7,7 @@ import { FaPaperPlane, FaArrowLeft, FaBrain, FaRobot } from 'react-icons/fa';
 import { HiDotsHorizontal } from 'react-icons/hi';
 import { BiCode } from 'react-icons/bi';
 import { FaChartLine } from 'react-icons/fa';
+import { useChat } from '@/hooks/useChat';
 
 interface Message {
   id: string;
@@ -42,13 +43,15 @@ interface ExampleMessage {
 
 export default function ChatPage() {
   const router = useRouter();
-  const [messages, setMessages] = useState<Message[]>([]);
+  // const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [typingPersona, setTypingPersona] = useState<string | null>(null);
+  // const [isProcessing, setIsProcessing] = useState(false);
+  // const [typingPersona, setTypingPersona] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const { messages, clearHistory, isProcessing, sendMessage, typingPersona } = useChat()
 
   const personas: Persona[] = [
     {
@@ -68,6 +71,7 @@ export default function ChatPage() {
   ];
 
   const exampleMessages: ExampleMessage[] = [
+    // Both personas (practical + technical depth)
     {
       id: '1',
       text: 'How do I implement authentication in Next.js?',
@@ -76,47 +80,40 @@ export default function ChatPage() {
     },
     {
       id: '2',
-      text: 'What are the best practices for React performance optimization?',
+      text: 'How to build a scalable chat application?',
       category: 'tech',
-      icon: '⚡'
+      icon: '💬'
     },
+
+    // Hitesh-focused (practical, beginner-friendly)
     {
       id: '3',
-      text: 'How do I design a scalable microservices architecture?',
+      text: 'Main coding seekhna chahta hun, kahan se start karun?',
+      category: 'tech',
+      icon: '🚀'
+    },
+    {
+      id: '4',
+      text: 'React mein components kaise banate hain step by step?',
+      category: 'tech',
+      icon: '⚛️'
+    },
+
+    // Piyush-focused (system design, architecture)
+    {
+      id: '5',
+      text: 'How to design a microservices architecture?',
       category: 'tech',
       icon: '🏗️'
     },
     {
-      id: '4',
-      text: 'What strategies work best for growing a tech startup?',
-      category: 'business',
-      icon: '📈'
-    },
-    // {
-    //   id: '5',
-    //   text: 'How do I optimize my website for better SEO ranking?',
-    //   category: 'business',
-    //   icon: '🔍'
-    // },
-    // {
-    //   id: '6',
-    //   text: 'What is the difference between Docker and Kubernetes?',
-    //   category: 'tech',
-    //   icon: '🐳'
-    // },
-    // {
-    //   id: '7',
-    //   text: 'How do I implement effective A/B testing for my product?',
-    //   category: 'business',
-    //   icon: '🧪'
-    // },
-    // {
-    //   id: '8',
-    //   text: 'What are the latest trends in web development for 2024?',
-    //   category: 'general',
-    //   icon: '🌐'
-    // }
+      id: '6',
+      text: 'Database scaling strategies for high traffic apps?',
+      category: 'tech',
+      icon: '📊'
+    }
   ];
+
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -145,81 +142,6 @@ export default function ChatPage() {
     return persona?.color || 'gray';
   };
 
-  const simulateRouterDecision = async (userMessage: string): Promise<string> => {
-    const techKeywords = ['code', 'programming', 'javascript', 'react', 'web', 'development', 'python', 'security', 'docker', 'kubernetes', 'authentication', 'performance'];
-    const businessKeywords = ['marketing', 'growth', 'business', 'strategy', 'analytics', 'seo', 'sales', 'startup', 'testing', 'product'];
-
-    const lowerMessage = userMessage.toLowerCase();
-    const hasTechKeywords = techKeywords.some(keyword => lowerMessage.includes(keyword));
-    const hasBusinessKeywords = businessKeywords.some(keyword => lowerMessage.includes(keyword));
-
-    if (hasTechKeywords && !hasBusinessKeywords) {
-      return 'hitesh';
-    } else if (hasBusinessKeywords && !hasTechKeywords) {
-      return 'piyush';
-    } else {
-      return Math.random() > 0.5 ? 'hitesh' : 'piyush';
-    }
-  };
-
-  const prepareChatMLRequest = (chatHistory: Message[], newMessage: string) => {
-    const messages: ChatMessage[] = [
-      {
-        role: 'system',
-        content: 'You are a smart routing system for MultiMind AI chat. Analyze the user message and decide which persona should respond based on their expertise.'
-      }
-    ];
-
-    chatHistory.forEach(msg => {
-      if (msg.type === 'user') {
-        messages.push({
-          role: 'user',
-          content: msg.content
-        });
-      } else if (msg.type === 'persona') {
-        messages.push({
-          role: 'assistant',
-          content: msg.content,
-          name: msg.personaName,
-          persona_id: msg.personaId
-        });
-      }
-    });
-
-    messages.push({
-      role: 'user',
-      content: newMessage
-    });
-
-    return {
-      model: 'gpt-3.5-turbo',
-      messages,
-      max_tokens: 150,
-      temperature: 0.7,
-      stream: false
-    };
-  };
-
-  const simulatePersonaResponse = (personaId: string, userMessage: string): string => {
-    const responses = {
-      hitesh: [
-        "Great question! Let me break this down for you in simple terms. Based on my experience teaching thousands of students...",
-        "As a tech educator, I'd recommend starting with the fundamentals. Here's what I've learned from years of teaching...",
-        "This is a common challenge many developers face. Let me share a practical approach that works well...",
-        "Excellent question! I've covered this topic extensively in my courses. Here's the most effective way to handle this..."
-      ],
-      piyush: [
-        "From a system design perspective, this is an interesting problem. In my experience building scalable applications...",
-        "Great question! At Teachyst, we faced a similar challenge. Here's how we approached it...",
-        "This reminds me of a problem we solved using microservices architecture. Let me share some insights...",
-        "As someone who's built multiple systems from scratch, I can tell you that the key is to focus on..."
-      ]
-    };
-
-    const personaResponses = responses[personaId as keyof typeof responses] || responses.hitesh;
-    return personaResponses[Math.floor(Math.random() * personaResponses.length)];
-  };
-
   const handleExampleClick = (exampleText: string) => {
     setInputValue(exampleText);
     if (textareaRef.current) {
@@ -229,68 +151,7 @@ export default function ChatPage() {
 
   const handleSendMessage = async () => {
     if (!inputValue.trim() || isProcessing) return;
-
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      type: 'user',
-      content: inputValue.trim(),
-      timestamp: new Date()
-    };
-
-    const currentInput = inputValue.trim();
-    setMessages(prev => [...prev, userMessage]);
-    setInputValue('');
-    setIsProcessing(true);
-
-    try {
-      // Prepare API request
-      const apiRequest = prepareChatMLRequest(messages, currentInput);
-      console.log('API Request:', JSON.stringify(apiRequest, null, 2));
-
-      // Show router decision (subtle)
-      const selectedPersonaId = await simulateRouterDecision(currentInput);
-      const selectedPersona = personas.find(p => p.id === selectedPersonaId);
-
-      const routerMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        type: 'system',
-        content: `Router decided: ${selectedPersona?.name} is best suited for this query`,
-        timestamp: new Date()
-      };
-
-      setMessages(prev => [...prev, routerMessage]);
-
-      // Show typing indicator
-      setTypingPersona(selectedPersonaId);
-
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 2000));
-
-      // Generate persona response
-      const responseContent = simulatePersonaResponse(selectedPersonaId, currentInput);
-
-      const personaResponse: Message = {
-        id: (Date.now() + 2).toString(),
-        type: 'persona',
-        content: responseContent,
-        timestamp: new Date(),
-        personaId: selectedPersonaId,
-        personaName: selectedPersona?.name
-      };
-
-      setMessages(prev => [...prev, personaResponse]);
-      setTypingPersona(null);
-
-      // Send to backend
-      await axios.post('/api/chat', {
-        messages: [...messages, userMessage, routerMessage, personaResponse]
-      });
-
-    } catch (error) {
-      console.error('Error processing message:', error);
-    } finally {
-      setIsProcessing(false);
-    }
+    sendMessage(inputValue.trim())
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -386,7 +247,7 @@ export default function ChatPage() {
               {/* User Message Bubble */}
               {message.type === 'user' && (
                 <div className="flex justify-end mb-4">
-                  <div className="max-w-xs lg:max-w-lg">
+                  <div className="max-w-xs lg:max-w-2xl">
                     <div className="bg-gradient-to-r from-blue-600 to-blue-500 text-white px-5 py-3 rounded-3xl rounded-br-lg shadow-lg">
                       <p className="text-sm leading-relaxed">{message.content}</p>
                     </div>
@@ -424,7 +285,7 @@ export default function ChatPage() {
                       }}
                     />
                   </div>
-                  <div className="max-w-xs lg:max-w-lg">
+                  <div className="max-w-xs lg:max-w-2xl">
                     <div className="bg-gradient-to-r from-gray-800/80 to-gray-700/60 backdrop-blur-sm text-white px-5 py-3 rounded-3xl rounded-tl-lg shadow-lg border border-gray-600/30">
                       <div className="flex items-center space-x-2 mb-2">
                         <span className="text-xs font-semibold text-gray-300">{message.personaName}</span>
@@ -502,9 +363,6 @@ export default function ChatPage() {
               <FaPaperPlane className="text-white text-lg" />
             </button>
           </div>
-          {/* {isProcessing && (
-            <p className="text-xs text-gray-500 mt-2 text-center">Processing your message...</p>
-          )} */}
         </div>
       </div>
     </div>
